@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        /*去除标签自带的样式*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        /*设置整个轮播图的布局*/
+        .carousel {
+            position: relative;
+            margin: 40px auto;
+            width: 1000px;
+            height: 460px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            /*超出部分隐藏*/
+            overflow: hidden;
+        }
+
+        /*设置背景图片的布局*/
+        .content {
+            position: absolute;
+            z-index: 1;
+        }
+
+        /*设置左移、右移图标和指示器的布局*/
+        .pos,
+        .dot {
+            position: absolute;
+            z-index: 2;
+            width: 100%;
+        }
+
+        /*设置左移、右移图标先垂直居中、不显示*/
+        .pos {
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+
+        /*设置左移、右移图标的背景*/
+        .pos>a {
+            padding: 10px 0;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /*设置左移图标的位置*/
+        .left {
+            float: left;
+        }
+
+        /*设置右移图标的位置*/
+        .right {
+            float: right;
+        }
+
+        /*设置指示器显示的位置*/
+        .dot {
+            bottom: 30px;
+            text-align: center;
+        }
+
+        /*设置指示器的背景*/
+        .dot ul {
+            display: inline-block;
+            padding: 2px;
+            background: rgba(0, 0, 0, .2);
+            border-radius: 15px;
+
+        }
+
+        /*设置圆点的大小*/
+        .dot>ul>li {
+            float: left;
+            margin: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        /*设置显示当前图片时指示器指示的位置*/
+        .active {
+            background: rgba(255, 255, 255, .6) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!--整个轮播图部分-->
+    <div class="carousel">
+        <!--图片背景-->
+        <div class="content">
+            <ul>
+                <li><a href=""><img src="./img/p1.png" alt=""></a></li>
+                <li><a href=""><img src="./img/p2.png" alt=""></a></li>
+                <li><a href=""><img src="./img/p3.png" alt=""></a></li>
+                <li><a href=""><img src="./img/p4.png" alt=""></a></li>
+            </ul>
+        </div>
+        <!--左移、右移图标-->
+        <div class="pos">
+            <a href="" class="left">
+                <!-- <img src="./img/al.png" alt=""> -->
+                <svg t="1649669100340" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="2178" width="60" height="60">
+                    <path
+                        d="M729.6 931.2l-416-425.6 416-416c9.6-9.6 9.6-25.6 0-35.2-9.6-9.6-25.6-9.6-35.2 0l-432 435.2c-9.6 9.6-9.6 25.6 0 35.2l432 441.6c9.6 9.6 25.6 9.6 35.2 0C739.2 956.8 739.2 940.8 729.6 931.2z"
+                        p-id="2179" fill="#ffffff"></path>
+                </svg>
+            </a>
+            <a href="" class="right">
+                <!-- <img src="./img/ar.png" alt=""> -->
+                <svg t="1649669317850" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="2472" width="60" height="60">
+                    <path
+                        d="M761.6 489.6l-432-435.2c-9.6-9.6-25.6-9.6-35.2 0-9.6 9.6-9.6 25.6 0 35.2l416 416-416 425.6c-9.6 9.6-9.6 25.6 0 35.2s25.6 9.6 35.2 0l432-441.6C771.2 515.2 771.2 499.2 761.6 489.6z"
+                        p-id="2473" fill="#ffffff"></path>
+                </svg>
+            </a>
+        </div>
+        <!--指示器-->
+        <div class="dot">
+            <ul>
+                <li class="active"><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(function () {
+            /*保存当前图片的索引*/
+            let index = 0;
+            let btn = false;
+            /*去除a标签自带的刷新*/
+            $('a[href=""]').prop('href', 'javascript:;');
+            /*开始先把图片隐藏，默认显示第一张图*/
+            $('.content>ul>li').hide();
+            $('.content>ul>li:eq(0)').show();
+            // 设置方向箭头图标的淡入、淡出
+            $('.carousel').hover(function () {
+                $('.pos').stop().fadeIn();
+                $('.dot').stop().fadeIn();
+            }, function () {
+                $('.pos').stop().fadeOut();
+                $('.dot').stop().fadeOut();
+            })
+            // 为左方向图标绑定点击事件
+            $('.left').on('click', function () {
+                btn = true;
+                clean();
+                if (index == 0) {
+                    index = 3;
+                } else {
+                    --index;
+                }
+                show();
+            })
+            // 为右方向图标绑定点击事件
+            $('.right').on('click', function () {
+                btn = true;
+                clean();
+                if (index == 3) {
+                    index = 0;
+                } else {
+                    ++index;
+                }
+                show();
+            })
+            //指示器指示功能（为指示器绑定点击事件）
+            $('.dot li').on('click', function () {
+                btn = true;
+                let now = $(this).index()
+                if (now != index) {
+                    clean();
+                    index = now;
+                    show();
+                }
+            })
+            //自动播放功能（定时器）
+            setInterval(function () {
+                if (!btn) {
+                    clean();
+                    if (index == 3) {
+                        index = 0;
+                    } else {
+                        ++index;
+                    }
+                    show();
+                } else {
+                    btn = false;
+                }
+
+            }, 5000)
+
+            //清除上一张图片和指示器上的指示
+            function clean() {
+                $(`.content>ul>li:eq(${index})`).stop().fadeOut();
+                $(`.dot>ul>li:eq(${index})`).removeClass('active');
+            }
+            //添加新的图片和指示器上的指示
+            function show() {
+                console.log(index);
+                $(`.content>ul>li:eq(${index})`).stop().fadeIn();
+                console.log($(`.content>ul>li:eq(${index})`))
+                $(`.dot>ul>li:eq(${index})`).addClass('active');
+
+            }
+        })
+    </script>
+</body>
+
+</html>

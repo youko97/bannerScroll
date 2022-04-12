@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        body {
+            background-color: #fff;
+        }
+
+        .col {
+            width: 600px;
+            height: 370px;
+            margin: 0 auto;
+            margin-top: 150px;
+            margin-bottom: 60px;
+            position: relative;
+            transform: scale(1.5);
+            color: white;
+            font-size: 28px;
+        }
+
+        .col_window {
+            height: 340px;
+            background-color: #11212F;
+            box-shadow: 0 0 8px black;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .col_con {
+            position: absolute;
+            left: 0;
+            height: 340px;
+            transition: left .4s ease;
+        }
+
+        .col_con>img {
+            float: left;
+        }
+
+        .arrows_Lcon {
+            width: 45px;
+            height: 108px;
+            background: rgba(0, 0, 0, 0.52);
+            position: absolute;
+            top: 35%;
+            left: 0;
+            cursor: pointer;
+        }
+
+        .arrows_Rcon {
+            width: 45px;
+            height: 108px;
+            background: rgba(0, 0, 0, 0.52);
+            position: absolute;
+            top: 35%;
+            right: 0;
+            cursor: pointer;
+        }
+
+        .arrows_Lcon:hover {
+            background: linear-gradient(to right, rgba(171, 218, 244, 0.3) 5%, rgba(171, 218, 244, 0) 95%);
+        }
+
+        .arrows_Rcon:hover {
+            background: linear-gradient(to left, rgba(171, 218, 244, 0.3) 5%, rgba(171, 218, 244, 0) 95%);
+        }
+
+        .arrows_left,
+        .arrows_right {
+            font-family: "宋体";
+        }
+
+        .arrows_left {
+            width: 23px;
+            height: 36px;
+            margin: 0 auto;
+            margin-top: 35px;
+
+        }
+
+        .arrows_right {
+            width: 23px;
+            height: 36px;
+            margin: 0 auto;
+            margin-top: 35px;
+        }
+
+        .dots {
+            width: 600px;
+            height: 9px;
+            margin: 0 auto;
+            margin-top: 20px;
+            transform: scale(1.5);
+            position: absolute;
+            bottom: 25px;
+        }
+
+        .dots div {
+            width: 72px;
+            margin: 0 auto;
+        }
+
+        .dots span {
+            width: 16px;
+            height: 9px;
+            background-color: #496274;
+            float: left;
+            margin-left: 5px;
+            border-radius: 2px;
+            cursor: pointer;
+            color: transparent;
+        }
+
+        .dots span:hover {
+            background-color: #768895 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col">
+        <div class="col_window">
+            <div class="col_con">
+                <img src="img/t1.png" alt="" width="600">
+                <img src="img/t2.png" alt="" width="600">
+                <img src="img/t3.png" alt="" width="600">
+            </div>
+            <div class="arrows">
+                <div class="arrows_Lcon">
+                    <div class="arrows_left"><</div>
+                    </div>
+                    <div class="arrows_Rcon">
+                        <div class="arrows_right">></div>
+                    </div>
+                </div>
+                <div class="dots">
+                    <div>
+                        <span style="background-color:#a1b5c3;"></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+    </div>
+        <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+        <script>
+            $(function () {
+                $('.arrows').hide();
+                $('.col_con').css({ width: "" + $('.col_window img').length * 600 + "px" });
+                $('.col_window').bind('mouseover', function () {       //鼠标放上图片
+                    $('.arrows').show(0);
+                    clearInterval(timer);
+                }).bind('mouseleave', function () {
+                    $('.arrows').hide(0);
+                    timer = setInterval(auto, 5000);
+                });
+                var left = 0;
+                function auto() {           //自动轮播
+                    left -= 600;
+                    if (left < -($('.col_con img').length - 1) * 600)
+                        left = 0;
+                    $('.col_con').css({ left: "" + left + "px" });
+                    for (var j = 0; j < ($('span').length); j++)
+                        $('span:eq(' + j + ')').css({ backgroundColor: "#496274" });
+                    $('span:eq(' + (-left / 600) + ')').css({ backgroundColor: "#a1b5c3" });
+                }
+                var timer = setInterval(auto, 5000);
+                $('.arrows_Lcon').on('click', function () {  //左滑
+                    left += 600;
+                    if (left > 0) {
+                        left = -($('.col_window img').length - 1) * 600;
+                    }
+                    $('.col_con').css({ left: "" + left + "px" });
+                    for (var j = 0; j < ($('span').length); j++)
+                        $('span:eq(' + j + ')').css({ backgroundColor: "#496274" });
+                    $('span:eq(' + (-left / 600) + ')').css({ backgroundColor: "#a1b5c3" });
+                    clearInterval(timer);
+                    //timer = setInterval(auto,5000);
+                });
+                $('.arrows_Rcon').on('click', function () {  //右滑
+                    left -= 600;
+                    if (left < -($('.col_window img').length - 1) * 600)
+                        left = 0;
+                    $('.col_con').css({ left: "" + left + "px" });
+                    for (var j = 0; j < ($('span').length); j++)
+                        $('span:eq(' + j + ')').css({ backgroundColor: "#496274" });
+                    $('span:eq(' + (-left / 600) + ')').css({ backgroundColor: "#a1b5c3" });
+                    clearInterval(timer);
+                    //timer = setInterval(auto,5000);
+                });
+                $('.dots span').on('click', function () {    //点击切换
+                    for (var j = 0; j < ($('span').length); j++)
+                        $('span:eq(' + j + ')').css({ backgroundColor: "#496274" });
+                    $(this).css({ backgroundColor: "#a1b5c3" });
+                    left = -600 * $(this).index();
+                    $('.col_con').css({ left: "" + left + "px" });
+                    clearInterval(timer);
+                    //timer = setInterval(auto,5000);
+                });
+            })
+        </script>
+</body>
+
+</html>
